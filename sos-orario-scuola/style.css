@@ -666,12 +666,9 @@ main.layout-3col {
   background: var(--panel);
   border-radius: 10px;
   margin-bottom: 10px;
-  flex-wrap: wrap;
   min-height: 58px;
-  /* many lessons in hand must not squeeze the board: the pool scrolls instead */
-  max-height: 32vh;
-  overflow-y: auto;
   flex-shrink: 0;
+  min-width: 0;
 }
 .pool-bar .label {
   font-size: 13px;
@@ -681,12 +678,22 @@ main.layout-3col {
   padding-top: 8px;
   flex-shrink: 0;
 }
+/* lessons in hand sit on a single row that scrolls sideways,
+   so the board keeps the same size however many are left */
 #pool {
   display: flex;
   gap: 10px;
   align-items: flex-start;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 6px 12px; /* room for the pins and the tilt */
+  scrollbar-width: thin;
+  scrollbar-color: var(--muted) transparent;
 }
+#pool .lesson-note { flex-shrink: 0; }
 #pool .lesson-note { background: var(--panel-2); color: var(--ink); border: 1.5px dashed var(--muted); box-shadow: none; }
 #pool .lesson-note .teacher { color: var(--ink-2); }
 #pool .lesson-note .pin { background: radial-gradient(circle at 35% 30%, #fff, var(--muted) 60%); }
