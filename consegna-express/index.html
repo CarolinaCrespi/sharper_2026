@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Consegna Express</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🚚</span><span>🗺️</span><span>📍</span></div>
+  <h1 data-i18n="title">Consegna Express</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Visita tutte le città. Torna alla partenza. Fai la strada più corta.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🏭</span><span data-i18n="howto_1">Parti dal magazzino (Partenza)</span></div>
+      <div class="howto-step"><span class="howto-icon">🖱️</span><span data-i18n="howto_2">Click sulle case 🏠 in ordine → costruisci il giro delle consegne</span></div>
+      <div class="howto-step"><span class="howto-icon">↩️</span><span data-i18n="howto_3">Click sull'ultima città → la togli</span></div>
+      <div class="howto-step"><span class="howto-icon">🎯</span><span data-i18n="howto_goal">Vince la rotta più corta</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_4">Poi sfida gli algoritmi!</span></div>
+    </div>
+
+    <details class="theory-details">
+      <summary data-i18n="theory_summary">ℹ️ Perché è così difficile?</summary>
+      <p data-i18n="intro_p1">
+        Devi visitare tutte le città <b>una sola volta</b> e tornare al punto di
+        partenza, facendo la strada <b>più corta possibile</b>. Sembra facile, ma
+        i percorsi possibili esplodono: con 10 città sono già 181.440, con 20
+        città più di 60 milioni di miliardi.
+      </p>
+      <p data-i18n="intro_p2">
+        È lo stesso tipo di problema che pianifica i giri dei <em>corrieri</em>,
+        i percorsi dei <em>trapani</em> che forano i circuiti elettronici, o
+        l'ordine in cui un <em>telescopio</em> osserva le stelle.
+      </p>
+      <p data-i18n="intro_p3">
+        Curiosità matematica: si chiama <b>problema del commesso viaggiatore</b>
+        (Travelling Salesman Problem, TSP) — ogni città è un nodo, ogni strada un
+        arco con la sua lunghezza.
+      </p>
+      <p data-i18n="intro_p4">
+        Trovare la rotta più corta è <b>NP-difficile</b>. Con poche città un
+        algoritmo <b>esatto</b> trova sempre l'ottimo; con tante città diventa
+        impossibile, e si usano <b>euristiche</b> e <b>metaeuristiche</b> —
+        provale qui a destra!
+      </p>
+    </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <!-- controls bar -->
+      <div class="controls-bar">
+        <label>
+          <span data-i18n="level_label">Livello:</span>
+          <select id="levelSelect" aria-label="Seleziona livello"></select>
+        </label>
+        <button id="btnUndo" type="button" data-i18n="btn_undo">↩ Annulla</button>
+        <button id="btnReset" type="button" data-i18n="btn_reset">Reset</button>
+        <span id="timer"></span>
+        <div id="hud"></div>
+      </div>
+
+      <!-- map board + overlays -->
+      <div class="board-wrap" aria-label="Mappa del percorso">
+        <canvas id="canvas" aria-label="mappa del percorso"></canvas>
+        <div id="feedback" class="feedback-toast"></div>
+      </div>
+
+      <!-- legend: click to show / hide a route -->
+      <div id="legend" class="legend-bar"></div>
+
+    </div>
+  </section>
+
+  <!-- ======= RIGHT PANE: algorithms ======= -->
+  <aside class="right-pane sidebar">
+
+    <!-- 1) ESATTO -->
+    <h3 data-i18n="cat_exact" data-i18n-title="cat_exact_hint">Esatto</h3>
+    <button class="algo-btn" data-algo="bf" data-i18n-title="cat_exact_hint">
+      <span class="dot" style="background:#FF6B81"></span>
+      <span class="algo-label"><span data-i18n="name_bf">Il Perfezionista</span><small>Brute Force</small></span>
+    </button>
+
+    <!-- 2) EURISTICA -->
+    <h3 data-i18n="cat_heur" data-i18n-title="cat_heur_hint">Euristica</h3>
+    <button class="algo-btn" data-algo="nn" data-i18n-title="cat_heur_hint">
+      <span class="dot" style="background:#4FD1FF"></span>
+      <span class="algo-label"><span data-i18n="name_nn">Il Furbo</span><small>Nearest Neighbor</small></span>
+    </button>
+
+    <!-- 3) METAEURISTICA — singola soluzione -->
+    <h3 data-i18n="cat_meta_single" data-i18n-title="cat_meta_single_hint">Metaeuristica</h3>
+    <button class="algo-btn" data-algo="sa" data-i18n-title="cat_meta_single_hint">
+      <span class="dot" style="background:#9B8CFF"></span>
+      <span class="algo-label"><span data-i18n="name_sa">Il Freddo</span><small>Simulated Annealing</small></span>
+    </button>
+
+    <!-- 4) METAEURISTICA — popolazione -->
+    <h3 data-i18n="cat_meta_pop" data-i18n-title="cat_meta_pop_hint">Popolazione</h3>
+    <button class="algo-btn" data-algo="aco" data-i18n-title="cat_meta_pop_hint">
+      <span class="dot" style="background:#3FE0C5"></span>
+      <span class="algo-label"><span data-i18n="name_aco">La Colonia</span><small>Ant Colony</small></span>
+    </button>
+    <button class="algo-btn" data-algo="ga" data-i18n-title="cat_meta_pop_hint">
+      <span class="dot" style="background:#FF8FC7"></span>
+      <span class="algo-label"><span data-i18n="name_ga">L'Evoluto</span><small>Genetic Algorithm</small></span>
+    </button>
+
+    <!-- Dynamic algo info -->
+    <div id="algoInfo" class="algo-info"></div>
+
+    <!-- Collapsed: approcci a confronto -->
+    <details class="theory-details">
+      <summary data-i18n="fixed_title">Cinque modi di cercare</summary>
+      <p data-i18n="fixed_text">
+        <em>Il Perfezionista</em> prova tutte le rotte e garantisce l'ottimo, ma
+        oltre 11 città ci metterebbe un'eternità. <em>Il Furbo</em> è istantaneo
+        ma miope. <em>Il Freddo</em> accetta anche mosse peggiori per non
+        bloccarsi. <em>La Colonia</em> e <em>L'Evoluto</em> fanno lavorare
+        insieme tante soluzioni. Nessuno dei quattro euristici garantisce l'ottimo.
+      </p>
+    </details>
+
+  </aside>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
+
+<!-- ======= I18N DICTIONARY ======= -->
+<script>
+const TSP_I18N = {
+  it: {
+    page_title: "Consegna Express — trova la rotta più corta",
+    title: "Consegna Express",
+    tagline: "Visita tutte le città. Torna alla partenza. Fai la strada più corta.",
+
+    theory_summary: "ℹ️ Perché è così difficile?",
+    intro_p1: "Devi visitare tutte le città <b>una sola volta</b> e tornare al punto di partenza, facendo la strada <b>più corta possibile</b>. Sembra facile, ma i percorsi possibili esplodono: con 10 città sono già 181.440, con 20 città più di 60 milioni di miliardi.",
+    intro_p2: "È lo stesso tipo di problema che pianifica i giri dei <em>corrieri</em>, i percorsi dei <em>trapani</em> che forano i circuiti elettronici, o l'ordine in cui un <em>telescopio</em> osserva le stelle.",
+    intro_p3: "Curiosità matematica: si chiama <b>problema del commesso viaggiatore</b> (Travelling Salesman Problem, TSP) — ogni città è un nodo, ogni strada un arco con la sua lunghezza.",
+    intro_p4: "Trovare la rotta più corta è <b>NP-difficile</b>. Con poche città un algoritmo <b>esatto</b> trova sempre l'ottimo; con tante città diventa impossibile, e si usano <b>euristiche</b> e <b>metaeuristiche</b> — provale qui a destra!",
+
+    howto_1: "Parti dal magazzino (Partenza)",
+    howto_2: "Click sulle case 🏠 in ordine → costruisci il giro delle consegne",
+    howto_3: "Click sull'ultima città → la togli",
+    howto_goal: "Vince la rotta più corta",
+    howto_4: "Poi sfida gli algoritmi!",
+
+    level_label: "Livello:",
+    btn_undo: "↩ Annulla",
+    btn_reset: "Reset",
+
+    cat_exact: "Esatto",
+    cat_exact_hint: "Trova sempre l'ottimo, solo su poche città",
+    cat_heur: "Euristica",
+    cat_heur_hint: "Velocissima, ma non garantisce l'ottimo",
+    cat_meta_single: "Metaeuristica",
+    cat_meta_single_hint: "Migliora una rotta passo dopo passo",
+    cat_meta_pop: "Popolazione",
+    cat_meta_pop_hint: "Tante soluzioni che collaborano o evolvono insieme",
+
+    name_bf: "Il Perfezionista",
+    name_nn: "Il Furbo",
+    name_sa: "Il Freddo",
+    name_aco: "La Colonia",
+    name_ga: "L'Evoluto",
+
+    fixed_title: "Cinque modi di cercare",
+    fixed_text: "<em>Il Perfezionista</em> prova tutte le rotte e garantisce l'ottimo, ma oltre 11 città ci metterebbe un'eternità. <em>Il Furbo</em> è istantaneo ma miope. <em>Il Freddo</em> accetta anche mosse peggiori per non bloccarsi. <em>La Colonia</em> e <em>L'Evoluto</em> fanno lavorare insieme tante soluzioni. Nessuno dei quattro euristici garantisce l'ottimo.",
+
+
+    info: {
+      bf: "<b>Il Perfezionista</b> (Brute Force)<br>Prova tutti i percorsi possibili e sceglie il più corto: perfetto ma lentissimo.",
+      nn: "<b>Il Furbo</b> (Nearest Neighbor)<br>Va sempre alla città più vicina: veloce, ma non sempre trova la strada migliore.",
+      sa: "<b>Il Freddo</b> (Simulated Annealing)<br>All'inizio esplora anche mosse peggiori, poi \"si raffredda\" e converge sul meglio trovato.",
+      aco: "<b>La Colonia</b> (Ant Colony)<br>Le formiche lasciano feromone sulle strade brevi: col tempo la colonia converge lì.",
+      ga: "<b>L'Evoluto</b> (Algoritmo Genetico)<br>Una popolazione di percorsi si incrocia e muta: sopravvive il più adatto, generazione dopo generazione."
+    },
+    feedback_your: "La tua rotta:",
+    feedback_challenge: "Riesci a fare di meglio? Sfida gli algoritmi per confrontarti!",
+    feedback_retry: "Riprova",
+    feedback_beat: "Hai battuto {algo}!",
+    feedback_tie: "Pareggio con {algo}!",
+    feedback_lost: "{algo} ha fatto meglio di te.",
+    disabled_bf: "Il Perfezionista non regge più di 11 città",
+    levels: [
+      {v:"10",it:"Facile (10 città)",en:"Easy (10 cities)"},
+      {v:"20",it:"Medio (20 città)",en:"Medium (20 cities)"},
+      {v:"30",it:"Difficile (30 città)",en:"Hard (30 cities)"},
+      {v:"40",it:"Molto difficile (40 città)",en:"Very hard (40 cities)"},
+      {v:"50",it:"Estremo (50 città)",en:"Extreme (50 cities)"}
+    ]
+  },
+  en: {
+    page_title: "Express Delivery — find the shortest route",
+    title: "Express Delivery",
+    tagline: "Visit every city. Return to the start. Take the shortest road.",
+
+    theory_summary: "ℹ️ Why is it so hard?",
+    intro_p1: "You must visit every city <b>exactly once</b> and return to the start, travelling the <b>shortest possible</b> distance. It looks easy, but the number of possible routes explodes: 10 cities already give 181,440, 20 cities over 60 quadrillion.",
+    intro_p2: "It's the same type of problem behind planning <em>delivery rounds</em>, the paths of <em>drills</em> punching holes in circuit boards, or the order in which a <em>telescope</em> observes the stars.",
+    intro_p3: "Math trivia: it's called the <b>Travelling Salesman Problem</b> (TSP) — each city is a node, each road an edge with its own length.",
+    intro_p4: "Finding the shortest route is <b>NP-hard</b>. With few cities an <b>exact</b> algorithm always finds the optimum; with many cities it becomes impossible, so <b>heuristics</b> and <b>metaheuristics</b> take over — try them on the right!",
+
+    howto_1: "Start from the warehouse (Start)",
+    howto_2: "Click the houses 🏠 in order → build the delivery round",
+    howto_3: "Click the last city → remove it",
+    howto_goal: "The shortest route wins",
+    howto_4: "Then beat the algorithms!",
+
+    level_label: "Level:",
+    btn_undo: "↩ Undo",
+    btn_reset: "Reset",
+
+    cat_exact: "Exact",
+    cat_exact_hint: "Always optimal, only for a few cities",
+    cat_heur: "Heuristic",
+    cat_heur_hint: "Lightning fast, but no optimum guaranteed",
+    cat_meta_single: "Metaheuristic",
+    cat_meta_single_hint: "Improves one route step by step",
+    cat_meta_pop: "Population",
+    cat_meta_pop_hint: "Many solutions cooperating or evolving together",
+
+    name_bf: "The Perfectionist",
+    name_nn: "The Sly One",
+    name_sa: "The Cool One",
+    name_aco: "The Colony",
+    name_ga: "The Evolved",
+
+    fixed_title: "Five ways to search",
+    fixed_text: "<em>The Perfectionist</em> tries every route and guarantees the optimum, but beyond 11 cities it would take forever. <em>The Sly One</em> is instant but short-sighted. <em>The Cool One</em> accepts even worse moves to avoid getting stuck. <em>The Colony</em> and <em>The Evolved</em> put many solutions to work together. None of the four heuristics guarantees the optimum.",
+
+
+    info: {
+      bf: "<b>The Perfectionist</b> (Brute Force)<br>Tries every possible route and picks the shortest: perfect but very slow.",
+      nn: "<b>The Sly One</b> (Nearest Neighbor)<br>Always goes to the closest city: fast, but not always the best route.",
+      sa: "<b>The Cool One</b> (Simulated Annealing)<br>At first explores even worse moves, then \"cools down\" and converges on the best found.",
+      aco: "<b>The Colony</b> (Ant Colony)<br>Ants leave pheromone on short routes: over time the colony converges there.",
+      ga: "<b>The Evolved</b> (Genetic Algorithm)<br>A population of routes crosses and mutates: the fittest survives, generation after generation."
+    },
+    feedback_your: "Your route:",
+    feedback_challenge: "Can you do better? Challenge the algorithms to compare!",
+    feedback_retry: "Try again",
+    feedback_beat: "You beat {algo}!",
+    feedback_tie: "Tied with {algo}!",
+    feedback_lost: "{algo} did better than you.",
+    disabled_bf: "The Perfectionist can't handle more than 11 cities",
+    levels: [
+      {v:"10",it:"Facile (10 città)",en:"Easy (10 cities)"},
+      {v:"20",it:"Medio (20 città)",en:"Medium (20 cities)"},
+      {v:"30",it:"Difficile (30 città)",en:"Hard (30 cities)"},
+      {v:"40",it:"Molto difficile (40 città)",en:"Very hard (40 cities)"},
+      {v:"50",it:"Estremo (50 città)",en:"Extreme (50 cities)"}
+    ]
+  }
+};
+
+/* ======= i18n engine ======= */
+const $ = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+
+let tspLang = localStorage.getItem('tsp_lang') ||
+  ((navigator.language||'it').toLowerCase().startsWith('en') ? 'en' : 'it');
+
+function fillLevels() {
+  const sel = $('#levelSelect'); if (!sel) return;
+  const cur = sel.value; sel.innerHTML = '';
+  TSP_I18N.it.levels.forEach(row => {
+    const o = document.createElement('option');
+    o.value = row.v; o.textContent = (tspLang === 'en' ? row.en : row.it);
+    sel.appendChild(o);
+  });
+  if (cur) sel.value = cur;
+}
+
+function setLang(lang) {
+  tspLang = lang;
+  const d = TSP_I18N[lang];
+  $$('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (d[k]) el.innerHTML = d[k];
+  });
+  $$('[data-i18n-title]').forEach(el => {
+    const k = el.getAttribute('data-i18n-title');
+    if (d[k]) el.title = d[k];
+  });
+  document.title = d.page_title || document.title;
+  document.documentElement.lang = lang;
+  fillLevels();
+  $('#btn-it')?.setAttribute('aria-pressed', lang === 'it');
+  $('#btn-en')?.setAttribute('aria-pressed', lang === 'en');
+  localStorage.setItem('tsp_lang', lang);
+  if (typeof updateExactButtons === 'function') updateExactButtons();
+  if (typeof updateLegend === 'function') updateLegend();
+  if (typeof refreshHUD === 'function') refreshHUD();
+  if (typeof draw === 'function') draw();
+}
+
+$('#btn-it')?.addEventListener('click', () => setLang('it'));
+$('#btn-en')?.addEventListener('click', () => setLang('en'));
+
+/* ======= theme toggle ======= */
+const themeBtn = $('#btn-theme');
+let currentTheme = localStorage.getItem('tsp_theme') || 'dark';
+function applyTheme(t) {
+  currentTheme = t;
+  if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  if (themeBtn) themeBtn.textContent = t === 'light' ? '☀' : '☾';
+  localStorage.setItem('tsp_theme', t);
+  // canvas colors depend on the theme
+  if (typeof draw === 'function') draw();
+  if (typeof updateLegend === 'function') updateLegend();
+  if (typeof refreshHUD === 'function') refreshHUD();
+}
+themeBtn?.addEventListener('click', () => applyTheme(currentTheme === 'light' ? 'dark' : 'light'));
+applyTheme(currentTheme);
+
+/* ======= init lang ======= */
+setLang(tspLang);
+</script>
+
+<!-- ======= GAME LOGIC ======= -->
+<script src="main.js"></script>
+</body>
+</html>
