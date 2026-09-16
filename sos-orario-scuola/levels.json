@@ -176,23 +176,6 @@
     ]
   },
   {
-    "id": "L8",
-    "name": { "it": "Un Solo Prof", "en": "One Teacher Only" },
-    "goal": 5,
-    "timeLimitSec": 60,
-    "nodes": [
-      {"id":88,"subjectIdx":2,"teacher":"Fabbri","class":"5B"},
-      {"id":87,"subjectIdx":1,"teacher":"Fabbri","class":"5B"},
-      {"id":86,"subjectIdx":0,"teacher":"Fabbri","class":"5B"},
-      {"id":90,"subjectIdx":4,"teacher":"Fabbri","class":"5B"},
-      {"id":89,"subjectIdx":3,"teacher":"Fabbri","class":"5B"}
-    ],
-    "edges": [
-      [86,87],[86,88],[86,89],[86,90],[87,88],[87,89],[87,90],[88,89],[88,90],
-      [89,90]
-    ]
-  },
-  {
     "id": "L9",
     "name": { "it": "Rotazione Docenti", "en": "Teacher Rotation" },
     "goal": 3,
