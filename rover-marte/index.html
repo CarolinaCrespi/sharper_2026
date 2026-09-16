@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Rover su Marte</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🚙</span><span>🪐</span><span>🚀</span></div>
+  <h1 data-i18n="title">Rover su Marte</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Porta il rover alla base. Vedi solo ciò che è vicino. Consuma meno energia possibile.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🎮</span><span data-i18n="howto_1">Frecce / WASD, oppure clicca vicino al rover → si muove di una casella</span></div>
+      <div class="howto-step"><span class="howto-icon">🚀</span><span data-i18n="howto_2">Raggiungi la base 🚀 consumando meno energia possibile</span></div>
+      <div class="howto-step"><span class="howto-icon">⚡</span><span data-i18n="howto_3">La sabbia costa <b>3 ⚡</b>, il terreno <b>1 ⚡</b>, le rocce non si attraversano</span></div>
+      <div class="howto-step"><span class="howto-icon">📡</span><span data-i18n="howto_4">Vedi solo entro il raggio dei <b>sensori</b>: il resto è da scoprire</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_5">Poi guarda come se la cavano gli algoritmi, sulla stessa mappa!</span></div>
+    </div>
+
+    <details class="theory-details">
+      <summary data-i18n="theory_summary">ℹ️ Perché un rover deve guidarsi da solo?</summary>
+      <p data-i18n="intro_p1"></p>
+      <p data-i18n="intro_p2"></p>
+      <p data-i18n="intro_p3"></p>
+      <p data-i18n="intro_p4"></p>
+    </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <div class="controls-bar">
+        <label>
+          <span data-i18n="level_label">Mappa:</span>
+          <select id="levelSel" aria-label="Mappa">
+            <option value="plain" data-i18n="lvl_plain">La pianura (facile)</option>
+            <option value="crater" data-i18n="lvl_crater">Il cratere (medio)</option>
+            <option value="canyon" data-i18n="lvl_canyon">I canyon (difficile)</option>
+            <option value="random" data-i18n="lvl_random">Mappa casuale</option>
+          </select>
+        </label>
+        <button id="btnNewMap" type="button" data-i18n="btn_new_map">🎲 Nuova</button>
+        <label class="range"><span data-i18n="lbl_sensor">Sensori</span><input id="sensor" type="range" min="1" max="4" step="1" value="2"/><b id="sensorVal">2</b></label>
+        <label class="range"><span data-i18n="lbl_speed">Velocità</span><input id="speed" type="range" min="1" max="5" step="1" value="3"/><b id="speedVal">3</b></label>
+        <label class="chk"><input id="noFog" type="checkbox"/> <span data-i18n="chk_fog">Mostra tutta la mappa</span></label>
+        <button id="btnYou" type="button" class="primary" data-i18n="btn_you">🕹️ Ricomincia</button>
+        <div id="hud"></div>
+      </div>
+
+      <div class="board-wrap" aria-label="Superficie di Marte">
+        <canvas id="canvas"></canvas>
+        <div id="feedback" class="feedback-toast"></div>
+      </div>
+
+      <div class="under-board">
+        <div class="legend-bar" aria-hidden="true">
+          <span class="legend-chip on"><span class="swatch flat"></span><span data-i18n="legend_flat">Terreno · 1 ⚡</span></span>
+          <span class="legend-chip on"><span class="swatch sand"></span><span data-i18n="legend_sand">Sabbia · 3 ⚡</span></span>
+          <span class="legend-chip on"><span class="swatch rock"></span><span data-i18n="legend_rock">Roccia</span></span>
+          <span class="legend-chip on"><span class="swatch fog"></span><span data-i18n="legend_fog">Non ancora visto</span></span>
+        </div>
+
+        <!-- touch controls (hidden when a mouse + keyboard are available) -->
+        <div class="dpad" role="group" data-i18n-aria="dpad_label" aria-label="Comandi del rover">
+          <button type="button" data-dir="0" class="up" aria-label="↑">▲</button>
+          <button type="button" data-dir="3" class="left" aria-label="←">◀</button>
+          <button type="button" data-dir="1" class="right" aria-label="→">▶</button>
+          <button type="button" data-dir="2" class="down" aria-label="↓">▼</button>
+        </div>
+      </div>
+
+      <div id="caption" class="caption"></div>
+
+    </div>
+  </section>
+
+  <!-- ======= RIGHT PANE: algorithms ======= -->
+  <aside class="right-pane sidebar">
+
+    <h3 data-i18n="cat_greedy">Senza mappa · punta dritto</h3>
+    <button class="algo-btn" data-algo="greedy">
+      <span class="dot" style="background:#FF6B81"></span>
+      <span class="algo-label"><span data-i18n="n_greedy">Il Testardo</span><small data-i18n="s_greedy">Greedy: sempre verso la base</small></span>
+    </button>
+
+    <h3 data-i18n="cat_replan">Senza mappa · ripianifica</h3>
+    <button class="algo-btn" data-algo="replan">
+      <span class="dot" style="background:#4FD1FF"></span>
+      <span class="algo-label"><span data-i18n="n_replan">Il Ripianificatore</span><small data-i18n="s_replan">D* Lite: rifà il piano se scopre ostacoli</small></span>
+    </button>
+
+    <h3 data-i18n="cat_astar">Con la mappa completa</h3>
+    <button class="algo-btn" data-algo="astar">
+      <span class="dot" style="background:#9B8CFF"></span>
+      <span class="algo-label"><span data-i18n="n_astar">Il Satellite</span><small data-i18n="s_astar">A*: conosce già tutta la mappa</small></span>
+    </button>
+
+    <h3 data-i18n="board_title">Classifica</h3>
+    <div id="scoreboard" class="scoreboard"></div>
+
+    <div id="algoInfo" class="algo-info"></div>
+  </aside>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
+
+<script src="i18n.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

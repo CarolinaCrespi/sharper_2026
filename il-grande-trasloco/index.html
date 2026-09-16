@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Il Grande Trasloco</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🎒</span><span>⚖️</span><span>💰</span></div>
+  <h1 data-i18n="title">Il Grande Trasloco</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Non superare il peso massimo. Massimizza il valore che porti.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🖱️</span><span data-i18n="howto_1">Click su un oggetto → lo metti nello zaino</span></div>
+      <div class="howto-step"><span class="howto-icon">🎒</span><span data-i18n="howto_2">Click di nuovo → lo togli</span></div>
+      <div class="howto-step"><span class="howto-icon">⚖️</span><span data-i18n="howto_3">Non puoi superare il peso massimo</span></div>
+      <div class="howto-step"><span class="howto-icon">🎯</span><span data-i18n="howto_goal">Vince chi porta più valore, non chi riempie di più</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_4">Poi sfida gli algoritmi!</span></div>
+    </div>
+
+    <details class="theory-details">
+      <summary data-i18n="theory_summary">ℹ️ Perché non posso portare tutto?</summary>
+      <p data-i18n="intro_p1">
+        Il tuo zaino ha una capacità massima. Ogni oggetto ha un <b>peso</b> e
+        un <b>valore</b> — la somma dei pesi degli oggetti scelti non può mai
+        superare la capacità dello zaino, quindi a volte conviene lasciare a
+        casa un oggetto pesante anche se vale molto.
+      </p>
+      <p data-i18n="intro_p2">
+        È lo stesso tipo di problema che decide <em>cosa caricare su un camion</em>
+        con un limite di peso, come <em>investire un budget</em> limitato, o
+        come <em>tagliare un rotolo di stoffa</em> sprecando meno materiale possibile.
+      </p>
+      <p data-i18n="intro_p3">
+        Curiosità matematica: si chiama <b>problema dello zaino</b> (Knapsack
+        Problem) — uno dei problemi di ottimizzazione più studiati in assoluto.
+      </p>
+      <p data-i18n="intro_p4">
+        Trovare la combinazione di valore massimo è <b>NP-difficile</b>. Con
+        pochi oggetti un algoritmo <b>esatto</b> trova sempre l'ottimo; con
+        tanti oggetti diventa impossibile, e si usano <b>metaeuristiche</b> —
+        provale qui a destra!
+      </p>
+    </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <!-- controls bar -->
+      <div class="controls-bar">
+        <label>
+          <span data-i18n="level_label">Livello:</span>
+          <select id="levelSel" aria-label="Seleziona livello"></select>
+        </label>
+        <button id="btnUndo" type="button" data-i18n="btn_undo">↩ Annulla</button>
+        <button id="btnReset" type="button" data-i18n="btn_reset">Reset</button>
+        <button id="btnFinish" type="button" data-i18n="btn_finish">🏁 Fine</button>
+        <span id="timer"></span>
+        <div id="hud">
+          <span class="hud-chip"><span data-i18n="weight_label">Peso:</span> <b id="weightCount">–</b></span>
+          <span class="hud-chip"><span data-i18n="value_label">Valore:</span> <b id="valueCount">–</b></span>
+          <span class="hud-chip"><span data-i18n="goal_label">Obiettivo: ≥</span> <b id="goalCount">–</b></span>
+        </div>
+      </div>
+
+      <!-- pool: oggetti non ancora nello zaino -->
+      <div class="pool-bar">
+        <span class="label" data-i18n="pool_label">Disponibili:</span>
+        <div id="pool"></div>
+      </div>
+
+      <!-- backpack board + overlays -->
+      <div class="board-wrap" aria-label="Zaino">
+        <div id="board" class="backpack">
+
+          <!-- top: shoulder-strap buckles + grab handle -->
+          <div class="bp-top" aria-hidden="true">
+            <span class="bp-buckle"></span>
+            <span class="bp-handle"></span>
+            <span class="bp-buckle"></span>
+          </div>
+
+          <!-- main compartment zipper -->
+          <div class="bp-zip" aria-hidden="true"><span class="bp-zip-pull"></span></div>
+
+          <!-- main compartment: packed items live here -->
+          <div class="bag-zone" id="bagZone"></div>
+
+          <!-- front pocket: luggage-scale capacity gauge -->
+          <div class="bp-pocket">
+            <span class="bp-pocket-zip" aria-hidden="true"></span>
+            <div class="cap-gauge">
+              <span id="capLabel">🎒 0 / 0</span>
+              <div class="cap-bar"><div class="cap-fill" id="capFill"></div></div>
+            </div>
+            <!-- appears when nothing else fits: weight, value carried, and
+                 whether that value can still be improved -->
+            <div id="bagStatus" class="bag-status" role="status" aria-live="polite"></div>
+          </div>
+
+        </div>
+        <div id="feedback" class="feedback-toast"></div>
+        <div id="progressBar" class="progress-bar" style="display:none;">
+          <div class="fill" id="progressFill"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======= RIGHT PANE: algorithms ======= -->
+  <aside class="right-pane sidebar">
+
+    <!-- 1) ESATTO — livelli piccoli -->
+    <h3 data-i18n="cat_exact" data-i18n-title="cat_exact_hint">Esatto</h3>
+    <button class="algo-btn" data-algo="bnb" data-i18n-title="cat_exact_hint">
+      <span class="dot" style="background:#FF4081"></span>
+      <span data-i18n="btn_bnb">Branch &amp; Bound</span>
+    </button>
+
+    <!-- 2) RICERCA LOCALE — livelli intermedi -->
+    <h3 data-i18n="cat_local" data-i18n-title="cat_local_hint">Ricerca locale</h3>
+    <button class="algo-btn" data-algo="ls" data-i18n-title="cat_local_hint">
+      <span class="dot" style="background:#4ECDC4"></span>
+      <span data-i18n="btn_ls">Local Search</span>
+    </button>
+
+    <!-- 3) METAEURISTICA — livelli grandi -->
+    <h3 data-i18n="cat_meta_single" data-i18n-title="cat_meta_single_hint">Metaeuristica</h3>
+    <button class="algo-btn" data-algo="ts" data-i18n-title="cat_meta_single_hint">
+      <span class="dot" style="background:#F97316"></span>
+      <span data-i18n="btn_ts">Tabu Search</span>
+    </button>
+
+    <!-- Dynamic algo info -->
+    <div id="algoInfo" class="algo-info"></div>
+
+    <!-- Collapsed: tre approcci a confronto -->
+    <details class="theory-details">
+      <summary data-i18n="fixed_title">Tre modi di cercare</summary>
+      <p data-i18n="fixed_text">
+        Il <em>Branch &amp; Bound</em> garantisce il massimo valore, ma il tempo
+        esplode con tanti oggetti (qui disattivato oltre 15). La <em>Local
+        Search</em> è veloce ma può bloccarsi in un vicolo cieco. La
+        <em>Tabu Search</em> accetta anche mosse peggiori per uscirne e vieta
+        di tornare subito indietro, e regge zaini molto più grandi. Ma né lei
+        né la Local Search garantiscono l'ottimo: spesso si fermano poco
+        sotto, ed è normale così.
+      </p>
+    </details>
+
+    <!-- Hint button -->
+    <button class="algo-btn" id="btnHint" style="margin-top:12px; border-style:dashed;">
+      <span class="dot" style="background:var(--yellow)"></span>
+      <span data-i18n="btn_hint">💡 Hint</span>
+    </button>
+
+  </aside>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
+
+<!-- ======= I18N DICTIONARY ======= -->
+<script>
+const GC_I18N = {
+  it: {
+    page_title: "Il Grande Trasloco — Riempi lo Zaino",
+    title: "Il Grande Trasloco",
+    tagline: "Non superare il peso massimo. Massimizza il valore che porti.",
+
+    theory_summary: "ℹ️ Perché non posso portare tutto?",
+    intro_p1: "Il tuo zaino ha una capacità massima. Ogni oggetto ha un <b>peso</b> e un <b>valore</b> — la somma dei pesi degli oggetti scelti non può mai superare la capacità dello zaino, quindi a volte conviene lasciare a casa un oggetto pesante anche se vale molto.",
+    intro_p2: "È lo stesso tipo di problema che decide <em>cosa caricare su un camion</em> con un limite di peso, come <em>investire un budget</em> limitato, o come <em>tagliare un rotolo di stoffa</em> sprecando meno materiale possibile.",
+    intro_p3: "Curiosità matematica: si chiama <b>problema dello zaino</b> (Knapsack Problem) — uno dei problemi di ottimizzazione più studiati in assoluto.",
+    intro_p4: "Trovare la combinazione di valore massimo è <b>NP-difficile</b>. Con pochi oggetti un algoritmo <b>esatto</b> trova sempre l'ottimo; con tanti oggetti diventa impossibile, e si usano <b>metaeuristiche</b> — provale qui a destra!",
+
+    howto_1: "Click su un oggetto → lo metti nello zaino",
+    howto_2: "Click di nuovo → lo togli",
+    howto_3: "Non puoi superare il peso massimo",
+    howto_goal: "Vince chi porta più valore, non chi riempie di più",
+    howto_4: "Poi sfida gli algoritmi!",
+
+    level_label: "Livello:",
+    level_opt_tpl: "{n} oggetti · capacità {cap} kg",
+    btn_undo: "↩ Annulla",
+    btn_reset: "Reset",
+    btn_finish: "🏁 Fine",
+    weight_label: "Peso:",
+    value_label: "Valore:",
+    goal_label: "Obiettivo: ≥",
+    pool_label: "Disponibili:",
+    unit_value: "valore",
+    pool_empty_hint: "Hai messo tutto nello zaino!",
+    bag_empty_hint: "Clicca un oggetto qui sotto per metterlo nello zaino",
+
+    bag_full_tpl: "Non entra più niente — {w}/{cap} kg · valore trasportato: {v}",
+    bag_full_optimal: "🏆 E hai preso il massimo valore possibile: nessuna combinazione fa meglio di {v}. Ora sfida gli algoritmi!",
+    bag_full_better: "Ma si può fare di meglio: il massimo è <b>{goal}</b> Non vince chi riempie lo zaino, vince chi trasporta più valore — prova a togliere un oggetto pesante e rimpiazzarlo con due leggeri che valgono di più.",
+
+    cat_exact: "Esatto",
+    cat_exact_hint: "Trova sempre l'ottimo, solo su pochi oggetti",
+    btn_bnb: "Branch & Bound",
+
+    cat_local: "Ricerca locale",
+    cat_local_hint: "Veloce, ma può bloccarsi in un vicolo cieco",
+    btn_ls: "Local Search",
+
+    cat_meta_single: "Metaeuristica",
+    cat_meta_single_hint: "Vieta le mosse appena fatte per non tornare indietro",
+    btn_ts: "Tabu Search",
+
+    fixed_title: "Tre modi di cercare",
+    fixed_text: "Il <em>Branch &amp; Bound</em> garantisce il massimo valore, ma il tempo esplode con tanti oggetti (qui disattivato oltre 15). La <em>Local Search</em> è veloce ma può bloccarsi in un vicolo cieco. La <em>Tabu Search</em> accetta anche mosse peggiori per uscirne e vieta di tornare subito indietro, e regge zaini molto più grandi. Ma né lei né la Local Search garantiscono l'ottimo: spesso si fermano poco sotto, ed è normale così.",
+
+    btn_hint: "💡 Hint",
+
+    feedback_win: "🎉 Ottimo!",
+    feedback_value_tpl: "Valore raggiunto: {N}",
+    feedback_optimal: "Hai trovato l'ottimo!",
+    feedback_not_optimal: "L'ottimo per questo livello è {goal} — si può fare meglio.",
+    feedback_beat: "Hai battuto {algo}!",
+    feedback_tie: "Come {algo} — pareggio!",
+    feedback_lost: "{algo} ha fatto meglio ({n}).",
+    feedback_retry: "Riprova",
+    feedback_challenge: "Prova gli algoritmi per confrontarti!",
+    algo_optimal_guaranteed: "Ottimo garantito",
+    algo_optimal_lucky: "Ha trovato l'ottimo — ma non era garantito",
+    algo_below: "Si ferma sotto l'ottimo ({goal}), ed è normale: nessuna euristica lo garantisce. Solo il Branch &amp; Bound lo trova sempre — ma solo su pochi oggetti.",
+    disabled_backtrack: "Troppi oggetti: il Branch & Bound impiegherebbe troppo tempo (oltre 15).",
+    no_fit: "Non entra più nello zaino!",
+
+    info: {
+      bnb: "<b>Branch &amp; Bound</b><br>Prova, per ogni oggetto, sia a includerlo che a escluderlo, tornando indietro nei vicoli ciechi — ma con un trucco in più: calcola un limite massimo teorico per ogni ramo e <em>taglia</em> subito quelli che non potrebbero mai battere il miglior risultato trovato finora. Garantisce il valore massimo assoluto, ma diventa impraticabile oltre ~15 oggetti.",
+      ls: "<b>Local Search</b><br>Parte da uno zaino iniziale (riempito per rapporto valore/peso) e prova piccoli cambiamenti a caso — aggiungere, togliere o scambiare un oggetto — accettando <em>solo</em> quelli che non peggiorano il valore. Veloce, ma se ogni cambiamento vicino peggiora le cose resta bloccata in un vicolo cieco — a differenza della Tabu Search, non ha modo di uscirne.",
+      ts: "<b>Tabu Search</b><br>Ad ogni passo guarda <em>tutte</em> le mosse possibili (mettere o togliere un oggetto) e prende la migliore — anche quando è una mossa che peggiora il valore, ed è così che esce dai vicoli ciechi in cui la Local Search si blocca. Per non rimetterci subito quello che ha appena tolto, ogni oggetto mosso finisce nella <em>lista tabù</em> e resta vietato per qualche giro; l'unica eccezione è se quella mossa vietata batterebbe il record (criterio di aspirazione). È la metaeuristica in cui il termine stesso è nato, con Fred Glover nel 1986. Regge zaini molto grandi, ma <b>non garantisce l'ottimo</b>: spesso si ferma poco sotto, ed è il prezzo che paghi per la velocità."
+    }
+  },
+  en: {
+    page_title: "The Big Move — Fill the Bag",
+    title: "The Big Move",
+    tagline: "Don't exceed the weight limit. Maximize the value you carry.",
+
+    theory_summary: "ℹ️ Why can't I bring everything?",
+    intro_p1: "Your backpack has a maximum capacity. Each item has a <b>weight</b> and a <b>value</b> — the total weight of the items you pick can never exceed the backpack's capacity, so sometimes it pays to leave a heavy item home even if it's worth a lot.",
+    intro_p2: "It's the same type of problem behind deciding <em>what to load on a truck</em> with a weight limit, how to <em>invest a limited budget</em>, or how to <em>cut a roll of fabric</em> wasting as little material as possible.",
+    intro_p3: "Math trivia: it's called the <b>knapsack problem</b> — one of the most studied optimization problems of all.",
+    intro_p4: "Finding the combination with maximum value is <b>NP-hard</b>. With few items an <b>exact</b> algorithm always finds the optimum; with many items it becomes impossible, so <b>metaheuristics</b> take over — try them on the right!",
+
+    howto_1: "Click an item → put it in the backpack",
+    howto_2: "Click again → take it out",
+    howto_3: "You can't exceed the weight limit",
+    howto_goal: "You win by carrying the most value, not by filling up",
+    howto_4: "Then beat the algorithms!",
+
+    level_label: "Level:",
+    level_opt_tpl: "{n} items · capacity {cap} kg",
+    btn_undo: "↩ Undo",
+    btn_reset: "Reset",
+    btn_finish: "🏁 Finish",
+    weight_label: "Weight:",
+    value_label: "Value:",
+    goal_label: "Target: ≥",
+    pool_label: "Available:",
+    unit_value: "value",
+    pool_empty_hint: "You've packed everything!",
+    bag_empty_hint: "Click an item below to put it in the backpack",
+
+    bag_full_tpl: "Nothing else fits — {w}/{cap} kg · value carried: {v}",
+    bag_full_optimal: "🏆 And you took the highest value possible: no combination beats {v}. Now take on the algorithms!",
+    bag_full_better: "But you can do better: the maximum is <b>{goal}</b> You don't win by filling the bag, you win by carrying the most value — try taking out a heavy item and replacing it with two light ones worth more.",
+
+    cat_exact: "Exact",
+    cat_exact_hint: "Always optimal, only for a few items",
+    btn_bnb: "Branch & Bound",
+
+    cat_local: "Local Search",
+    cat_local_hint: "Fast, but can get stuck in a dead end",
+    btn_ls: "Local Search",
+
+    cat_meta_single: "Metaheuristic",
+    cat_meta_single_hint: "Forbids the moves it just made, so it can't backtrack",
+    btn_ts: "Tabu Search",
+
+    fixed_title: "Three ways to search",
+    fixed_text: "<em>Branch &amp; Bound</em> guarantees the maximum value, but runtime explodes with many items (disabled here above 15). <em>Local Search</em> is fast but can get stuck in a dead end. <em>Tabu Search</em> accepts even worse moves to escape one and forbids going straight back, and handles much larger backpacks. But neither it nor Local Search guarantees the optimum: they often stop just short, and that's normal.",
+
+    btn_hint: "💡 Hint",
+
+    feedback_win: "🎉 Great!",
+    feedback_value_tpl: "Value reached: {N}",
+    feedback_optimal: "You found the optimum!",
+    feedback_not_optimal: "The optimum for this level is {goal} — you can do better.",
+    feedback_beat: "You beat {algo}!",
+    feedback_tie: "Same as {algo} — tie!",
+    feedback_lost: "{algo} did better ({n}).",
+    feedback_retry: "Try again",
+    feedback_challenge: "Try the algorithms to compare!",
+    algo_optimal_guaranteed: "Optimum guaranteed",
+    algo_optimal_lucky: "It found the optimum — but it wasn't guaranteed",
+    algo_below: "It stops below the optimum ({goal}), and that's normal: no heuristic guarantees it. Only Branch &amp; Bound always finds it — but only for a few items.",
+    disabled_backtrack: "Too many items: Branch & Bound would take too long (over 15).",
+    no_fit: "Doesn't fit in the backpack anymore!",
+
+    info: {
+      bnb: "<b>Branch &amp; Bound</b><br>For every item, it tries both including and excluding it, backtracking at dead ends — but with a twist: it computes a theoretical upper bound for each branch and <em>prunes</em> any branch that could never beat the best result found so far. Guarantees the absolute maximum value, but becomes impractical beyond ~15 items.",
+      ls: "<b>Local Search</b><br>Starts from an initial backpack (filled by value/weight ratio) and tries small random changes — adding, removing or swapping an item — accepting <em>only</em> the ones that don't lower the value. Fast, but if every nearby change makes things worse it gets stuck in a dead end — unlike Tabu Search, it has no way out.",
+      ts: "<b>Tabu Search</b><br>At every step it looks at <em>all</em> the available moves (put an item in, take one out) and picks the best one — even when that move lowers the value, which is exactly how it escapes the dead ends where Local Search gets stuck. To stop it from putting straight back what it just took out, every moved item goes on the <em>tabu list</em> and stays forbidden for a few rounds; the one exception is a forbidden move that would beat the record (aspiration criterion). It's the metaheuristic that gave the word its name, coined by Fred Glover in 1986. It handles very large backpacks, but it <b>doesn't guarantee the optimum</b>: it often stops just short, and that's the price of speed."
+    }
+  }
+};
+
+/* ======= i18n engine ======= */
+const $ = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+
+let gcLang = localStorage.getItem('zaino_lang') ||
+  ((navigator.language||'it').toLowerCase().startsWith('en') ? 'en' : 'it');
+
+function setLang(lang) {
+  gcLang = lang;
+  const d = GC_I18N[lang];
+  $$('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (d[k]) el.innerHTML = d[k];
+  });
+  $$('[data-i18n-title]').forEach(el => {
+    const k = el.getAttribute('data-i18n-title');
+    if (d[k]) el.title = d[k];
+  });
+  document.title = d.page_title || document.title;
+  document.documentElement.lang = lang;
+  $('#btn-it')?.setAttribute('aria-pressed', lang === 'it');
+  $('#btn-en')?.setAttribute('aria-pressed', lang === 'en');
+  localStorage.setItem('zaino_lang', lang);
+  if (typeof populateLevelSelect === 'function') populateLevelSelect();
+  if (typeof refreshAlgoInfo === 'function') refreshAlgoInfo();
+  if (typeof renderBoard === 'function') renderBoard();
+}
+
+$('#btn-it')?.addEventListener('click', () => setLang('it'));
+$('#btn-en')?.addEventListener('click', () => setLang('en'));
+
+/* ======= theme toggle ======= */
+const themeBtn = $('#btn-theme');
+let currentTheme = localStorage.getItem('zaino_theme') || 'dark';
+function applyTheme(t) {
+  currentTheme = t;
+  if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  if (themeBtn) themeBtn.textContent = t === 'light' ? '☀' : '☾';
+  localStorage.setItem('zaino_theme', t);
+}
+themeBtn?.addEventListener('click', () => applyTheme(currentTheme === 'light' ? 'dark' : 'light'));
+applyTheme(currentTheme);
+
+/* ======= init lang ======= */
+setLang(gcLang);
+</script>
+
+<!-- ======= GAME LOGIC ======= -->
+<script src="app.js"></script>
+</body>
+</html>

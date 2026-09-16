@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Caccia al Punto più Profondo</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🔦</span><span>🌊</span><span>💎</span></div>
+  <h1 data-i18n="title">Caccia al Punto più Profondo</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Il fondale è nella nebbia. Trova il punto più profondo esplorando meno celle possibile.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🔦</span><span data-i18n="howto_1">Click su una cella → la esplori e scopri quanto è profonda</span></div>
+      <div class="howto-step"><span class="howto-icon">🎯</span><span data-i18n="howto_2">Hai 30 tentativi per trovare il punto più profondo</span></div>
+      <div class="howto-step"><span class="howto-icon">🔲</span><span data-i18n="howto_3">Il riquadro è il <b>vicinato</b>: le celle "accanto" a quella in cui sei</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_4">Poi guarda come cercano gli algoritmi, sulla stessa mappa!</span></div>
+    </div>
+
+    <details class="theory-details" open>
+      <summary data-i18n="theory_summary">ℹ️ Esatti, approssimati, metaeuristiche</summary>
+      <p data-i18n="intro_p1">Un algoritmo <b>esatto</b> garantisce la soluzione migliore, ma per esserne sicuro deve controllare (quasi) tutto: su problemi grandi è troppo lento.</p>
+      <p data-i18n="intro_p2">Una <b>ricerca locale</b> parte da una soluzione e guarda solo il suo <b>vicinato</b>: le soluzioni che si ottengono con una piccola modifica. Si sposta sulla migliore finché nessun vicino è meglio. Veloce, ma si ferma nel primo "buco" che trova: un <em>ottimo locale</em>.</p>
+      <p data-i18n="intro_p3">Le <b>metaeuristiche</b> sono strategie per non restare intrappolati. Quelle a <b>soluzione singola</b> (come il Simulated Annealing) muovono una sola soluzione ma a volte accettano mosse peggiori. Quelle a <b>popolazione</b> (Genetico, Formiche, Sciame di particelle) muovono tante soluzioni che si scambiano informazioni.</p>
+      <p data-i18n="intro_p4">Nessuna metaeuristica garantisce l'ottimo, ma di solito trova soluzioni molto buone esplorando una piccola parte della mappa.</p>
+    </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <div class="controls-bar">
+        <label>
+          <span data-i18n="level_label">Mappa:</span>
+          <select id="levelSel" aria-label="Mappa"></select>
+        </label>
+        <label class="range"><span data-i18n="lbl_radius">Vicinato</span><input id="radius" type="range" min="1" max="4" step="1" value="1"/><b id="radiusVal">1</b></label>
+        <label class="range"><span data-i18n="lbl_speed">Velocità</span><input id="speed" type="range" min="1" max="5" step="1" value="3"/><b id="speedVal">3</b></label>
+        <label class="chk"><input id="noFog" type="checkbox"/> <span data-i18n="chk_fog">Togli nebbia</span></label>
+        <button id="btnYou" type="button" class="primary" data-i18n="btn_you">🔦 Tocca a te</button>
+        <div id="hud"></div>
+      </div>
+
+      <div class="board-wrap" aria-label="Fondale">
+        <canvas id="canvas"></canvas>
+        <div id="feedback" class="feedback-toast"></div>
+      </div>
+
+      <div id="caption" class="caption"></div>
+
+    </div>
+  </section>
+
+  <!-- ======= RIGHT PANE: algorithms ======= -->
+  <aside class="right-pane sidebar">
+
+    <h3 data-i18n="cat_exact">Esatto</h3>
+    <button class="algo-btn" data-algo="exact">
+      <span class="dot" style="background:#FF6B81"></span>
+      <span class="algo-label"><span data-i18n="n_exact">Ricerca esaustiva</span><small data-i18n="s_exact">controlla tutte le celle</small></span>
+    </button>
+
+    <h3 data-i18n="cat_local">Approssimato</h3>
+    <button class="algo-btn" data-algo="ls">
+      <span class="dot" style="background:#4FD1FF"></span>
+      <span class="algo-label"><span data-i18n="n_ls">Local Search</span><small data-i18n="s_ls">scende nel vicinato</small></span>
+    </button>
+
+    <h3 data-i18n="cat_single">Metaeuristica · singola</h3>
+    <button class="algo-btn" data-algo="sa">
+      <span class="dot" style="background:#9B8CFF"></span>
+      <span class="algo-label"><span data-i18n="n_sa">Simulated Annealing</span><small data-i18n="s_sa">a volte accetta di risalire</small></span>
+    </button>
+
+    <h3 data-i18n="cat_pop">Metaeuristica · popolazione</h3>
+    <button class="algo-btn" data-algo="ga">
+      <span class="dot" style="background:#FF8FC7"></span>
+      <span class="algo-label"><span data-i18n="n_ga">Algoritmo Genetico</span><small data-i18n="s_ga">incrocia e muta le soluzioni</small></span>
+    </button>
+    <button class="algo-btn" data-algo="aco">
+      <span class="dot" style="background:#3FE0C5"></span>
+      <span class="algo-label"><span data-i18n="n_aco">Colonia di Formiche</span><small data-i18n="s_aco">feromone sulle zone buone</small></span>
+    </button>
+    <button class="algo-btn" data-algo="pso">
+      <span class="dot" style="background:#FFB067"></span>
+      <span class="algo-label"><span data-i18n="n_pso">Sciame di Particelle</span><small data-i18n="s_pso">volano verso il migliore</small></span>
+    </button>
+
+    <h3 data-i18n="board_title">Classifica</h3>
+    <div id="scoreboard" class="scoreboard"></div>
+
+    <div id="algoInfo" class="algo-info"></div>
+  </aside>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
+
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+<script src="algos.js"></script>
+</body>
+</html>

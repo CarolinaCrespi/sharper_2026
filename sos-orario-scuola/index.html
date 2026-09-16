@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>SOS Orario Scuola</title>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🎒</span><span>📚</span><span>🔔</span></div>
+  <h1 data-i18n="title">SOS Orario Scuola</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Appendi le lezioni. Zero sovrapposizioni. Meno ore possibili.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🖱️</span><span data-i18n="howto_1">Click sulla lezione → la selezioni</span></div>
+      <div class="howto-step"><span class="howto-icon">📌</span><span data-i18n="howto_2">Click sull'ora → la appendi lì</span></div>
+      <div class="howto-step"><span class="howto-icon">🎯</span><span data-i18n="howto_3">0 conflitti, entro le ore-obiettivo</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_4">Poi sfida gli algoritmi!</span></div>
+    </div>
+
+    <details class="theory-details">
+      <summary data-i18n="theory_summary">ℹ️ Perché alcune lezioni vanno in conflitto?</summary>
+      <p data-i18n="intro_p1">
+        Ogni lezione ha una classe e un insegnante. Due lezioni non possono
+        stare nella stessa ora se coinvolgono <b>la stessa classe</b> (non può
+        seguire due materie insieme) o <b>lo stesso insegnante</b> (non può
+        essere in due aule insieme) — guarda i tag sulla card per capire
+        perché due lezioni sono in conflitto.
+      </p>
+      <p data-i18n="intro_p2">
+        È lo stesso tipo di problema che assegna <em>canali Wi-Fi</em> a router
+        vicini, organizza <em>turni di lavoro</em> o <em>orari dei treni</em>.
+        Meno ore ⇒ orario più efficiente.
+      </p>
+      <p data-i18n="intro_p3">
+        Curiosità matematica: si chiama <b>colorazione di un grafo</b> — ogni
+        lezione è un nodo, ogni conflitto un arco, e trovare il minimo di ore
+        equivale a colorare il grafo con meno colori possibile.
+      </p>
+      <p data-i18n="intro_p4">
+        Trovare il minimo di ore è <b>NP-difficile</b>. Con poche lezioni un
+        algoritmo <b>esatto</b> trova sempre l'ottimo; con tante lezioni diventa
+        impossibile, e si usano <b>metaeuristiche</b> — provale qui a destra!
+      </p>
+    </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <!-- controls bar -->
+      <div class="controls-bar">
+        <label>
+          <span data-i18n="level_label">Livello:</span>
+          <select id="levelSel" aria-label="Seleziona livello"></select>
+        </label>
+        <button id="btnUndo" type="button" data-i18n="btn_undo">↩ Annulla</button>
+        <button id="btnReset" type="button" data-i18n="btn_reset">Reset</button>
+        <span id="timer"></span>
+        <div id="hud">
+          <span class="hud-chip"><span data-i18n="used_label">Ore:</span> <b id="usedCount">–</b></span>
+          <span class="hud-chip"><span data-i18n="conf_label">Conflitti:</span> <b id="confCount">–</b></span>
+          <span class="hud-chip"><span data-i18n="goal_label">Obiettivo: ≤</span> <b id="goalCount">–</b></span>
+        </div>
+      </div>
+
+      <!-- pool: lezioni non ancora appuntate -->
+      <div class="pool-bar">
+        <span class="label" data-i18n="pool_label">In mano:</span>
+        <div id="pool"></div>
+      </div>
+
+      <!-- corkboard + overlays -->
+      <div class="board-wrap" aria-label="Diario di classe">
+        <div id="board" class="corkboard"></div>
+        <div id="feedback" class="feedback-toast"></div>
+        <div id="progressBar" class="progress-bar" style="display:none;">
+          <div class="fill" id="progressFill"></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ======= RIGHT PANE: algorithms ======= -->
+  <aside class="right-pane sidebar">
+
+    <!-- 1) ESATTO — livelli piccoli -->
+    <h3 data-i18n="cat_exact" data-i18n-title="cat_exact_hint">Esatto</h3>
+    <button class="algo-btn" data-algo="bnb" data-i18n-title="cat_exact_hint">
+      <span class="dot" style="background:#FF4081"></span>
+      <span data-i18n="btn_bnb">Branch &amp; Bound</span>
+    </button>
+
+    <!-- 2) RICERCA LOCALE — livelli intermedi -->
+    <h3 data-i18n="cat_local" data-i18n-title="cat_local_hint">Ricerca locale</h3>
+    <button class="algo-btn" data-algo="ls" data-i18n-title="cat_local_hint">
+      <span class="dot" style="background:#4ECDC4"></span>
+      <span data-i18n="btn_ls">Local Search</span>
+    </button>
+
+    <!-- 3) METAEURISTICA — livelli grandi -->
+    <h3 data-i18n="cat_meta_single" data-i18n-title="cat_meta_single_hint">Metaeuristica</h3>
+    <button class="algo-btn" data-algo="sa" data-i18n-title="cat_meta_single_hint">
+      <span class="dot" style="background:#F97316"></span>
+      <span data-i18n="btn_sa">Simulated Annealing</span>
+    </button>
+
+    <!-- Dynamic algo info -->
+    <div id="algoInfo" class="algo-info"></div>
+
+    <!-- Collapsed: tre approcci a confronto -->
+    <details class="theory-details">
+      <summary data-i18n="fixed_title">Tre modi di cercare</summary>
+      <p data-i18n="fixed_text">
+        Il <em>Branch &amp; Bound</em> garantisce il minimo, ma il tempo esplode
+        con tante lezioni (qui disattivato oltre 15). La <em>Local Search</em> è
+        veloce ma può bloccarsi in un vicolo cieco. Il <em>Simulated Annealing</em>
+        accetta anche mosse peggiori per uscirne, e regge orari molto più grandi.
+      </p>
+    </details>
+
+    <!-- Hint button -->
+    <button class="algo-btn" id="btnHint" style="margin-top:12px; border-style:dashed;">
+      <span class="dot" style="background:var(--yellow)"></span>
+      <span data-i18n="btn_hint">💡 Hint</span>
+    </button>
+
+  </aside>
+
+</main>
+
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
+
+<!-- ======= I18N DICTIONARY ======= -->
+<script>
+const GC_I18N = {
+  it: {
+    page_title: "SOS Orario Scuola — Diario di Classe",
+    title: "SOS Orario Scuola",
+    tagline: "Appendi le lezioni. Zero sovrapposizioni. Meno ore possibili.",
+
+    theory_summary: "ℹ️ Perché alcune lezioni vanno in conflitto?",
+    intro_p1: "Ogni lezione ha una classe e un insegnante. Due lezioni non possono stare nella stessa ora se coinvolgono <b>la stessa classe</b> (non può seguire due materie insieme) o <b>lo stesso insegnante</b> (non può essere in due aule insieme) — guarda i tag sulla card per capire perché due lezioni sono in conflitto.",
+    intro_p2: "È lo stesso tipo di problema che assegna <em>canali Wi-Fi</em> a router vicini, organizza <em>turni di lavoro</em> o <em>orari dei treni</em>. Meno ore ⇒ orario più efficiente.",
+    intro_p3: "Curiosità matematica: si chiama <b>colorazione di un grafo</b> — ogni lezione è un nodo, ogni conflitto un arco, e trovare il minimo di ore equivale a colorare il grafo con meno colori possibile.",
+    intro_p4: "Trovare il minimo di ore è <b>NP-difficile</b>. Con poche lezioni un algoritmo <b>esatto</b> trova sempre l'ottimo; con tante lezioni diventa impossibile, e si usano <b>metaeuristiche</b> — provale qui a destra!",
+
+    howto_1: "Click sulla lezione → la selezioni",
+    howto_2: "Click sull'ora → la appendi lì",
+    howto_3: "0 conflitti, entro le ore-obiettivo",
+    howto_4: "Poi sfida gli algoritmi!",
+
+    level_label: "Livello:",
+    btn_undo: "↩ Annulla",
+    btn_reset: "Reset",
+    used_label: "Ore:",
+    conf_label: "Conflitti:",
+    goal_label: "Obiettivo: ≤",
+    pool_label: "In mano:",
+    unit_slots: "ore",
+
+    cat_exact: "Esatto",
+    cat_exact_hint: "Trova sempre l'ottimo, solo su poche lezioni",
+    btn_bnb: "Branch & Bound",
+
+    cat_local: "Ricerca locale",
+    cat_local_hint: "Veloce, ma può bloccarsi in un vicolo cieco",
+    btn_ls: "Local Search",
+
+    cat_meta_single: "Metaeuristica",
+    cat_meta_single_hint: "Migliora un orario passo dopo passo",
+    btn_sa: "Simulated Annealing",
+
+    fixed_title: "Tre modi di cercare",
+    fixed_text: "Il <em>Branch &amp; Bound</em> garantisce il minimo, ma il tempo esplode con tante lezioni (qui disattivato oltre 15). La <em>Local Search</em> è veloce ma può bloccarsi in un vicolo cieco. Il <em>Simulated Annealing</em> accetta anche mosse peggiori per uscirne, e regge orari molto più grandi.",
+
+    btn_hint: "💡 Hint",
+
+    feedback_win: "🎉 Perfetto!",
+    feedback_colors_tpl: "{N} ore, 0 conflitti",
+    feedback_optimal: "Hai trovato l'ottimo!",
+    feedback_not_optimal: "L'ottimo per questo livello è {goal} ore — si può fare meglio.",
+    feedback_beat: "Hai battuto {algo}!",
+    feedback_tie: "Come {algo} — pareggio!",
+    feedback_lost: "{algo} ha fatto meglio ({n} ore).",
+    feedback_retry: "Riprova",
+    feedback_challenge: "Prova gli algoritmi per confrontarti!",
+    disabled_backtrack: "Troppe lezioni: il Branch & Bound impiegherebbe troppo tempo (oltre 15).",
+
+    info: {
+      bnb: "<b>Branch &amp; Bound</b><br>Come il backtracking, prova ogni ora per ogni lezione tornando indietro nei vicoli ciechi — ma con un trucco in più: tiene il conto del miglior risultato trovato finora e <em>taglia</em> subito i tentativi che non potrebbero mai batterlo, senza nemmeno esplorarli. Garantisce il minimo assoluto, ma diventa impraticabile oltre ~15 lezioni.",
+      ls: "<b>Local Search</b><br>Parte da un orario iniziale e prova piccoli cambiamenti a caso, accettando <em>solo</em> quelli che migliorano (o non peggiorano) la situazione. Veloce, ma se ogni cambiamento vicino peggiora le cose resta bloccata in un vicolo cieco — a differenza del Simulated Annealing, non ha modo di uscirne.",
+      sa: "<b>Simulated Annealing</b><br>Parte da un orario iniziale e lo migliora con piccoli cambiamenti casuali. Come un metallo che si raffredda: all'inizio accetta anche mosse che peggiorano (per esplorare, ed evitare di bloccarsi come la Local Search), poi diventa sempre più selettivo fino a convergere. Funziona anche su tante lezioni, ma non garantisce l'ottimo."
+    }
+  },
+  en: {
+    page_title: "SOS School Timetable — Class Diary",
+    title: "SOS School Timetable",
+    tagline: "Pin the lessons. Zero overlaps. Fewest hours possible.",
+
+    theory_summary: "ℹ️ Why do some lessons conflict?",
+    intro_p1: "Each lesson has a class and a teacher. Two lessons can't sit in the same hour if they involve <b>the same class</b> (a class can't attend two subjects at once) or <b>the same teacher</b> (can't be in two rooms at once) — check the tags on each card to see why two lessons conflict.",
+    intro_p2: "It's the same type of problem behind assigning <em>Wi-Fi channels</em> to nearby routers, or scheduling <em>work shifts</em> and <em>train timetables</em>. Fewer hours ⇒ a more efficient timetable.",
+    intro_p3: "Math trivia: it's called <b>graph coloring</b> — each lesson is a node, each conflict an edge, and finding the minimum number of hours means coloring the graph with as few colors as possible.",
+    intro_p4: "Finding the minimum number of hours is <b>NP-hard</b>. With few lessons an <b>exact</b> algorithm always finds the optimum; with many lessons it becomes impossible, so <b>metaheuristics</b> take over — try them on the right!",
+
+    howto_1: "Click a lesson → select it",
+    howto_2: "Click an hour → pin it there",
+    howto_3: "0 conflicts, within the target hours",
+    howto_4: "Then beat the algorithms!",
+
+    level_label: "Level:",
+    btn_undo: "↩ Undo",
+    btn_reset: "Reset",
+    used_label: "Hours:",
+    conf_label: "Conflicts:",
+    goal_label: "Target: ≤",
+    pool_label: "In hand:",
+    unit_slots: "hours",
+
+    cat_exact: "Exact",
+    cat_exact_hint: "Always optimal, only for a few lessons",
+    btn_bnb: "Branch & Bound",
+
+    cat_local: "Local Search",
+    cat_local_hint: "Fast, but can get stuck in a dead end",
+    btn_ls: "Local Search",
+
+    cat_meta_single: "Metaheuristic",
+    cat_meta_single_hint: "Improves a timetable step by step",
+    btn_sa: "Simulated Annealing",
+
+    fixed_title: "Three ways to search",
+    fixed_text: "<em>Branch &amp; Bound</em> guarantees the minimum, but runtime explodes with many lessons (disabled here above 15). <em>Local Search</em> is fast but can get stuck in a dead end. <em>Simulated Annealing</em> accepts even worse moves to escape one, and handles much larger timetables.",
+
+    btn_hint: "💡 Hint",
+
+    feedback_win: "🎉 Perfect!",
+    feedback_colors_tpl: "{N} hours, 0 conflicts",
+    feedback_optimal: "You found the optimum!",
+    feedback_not_optimal: "The optimum for this level is {goal} hours — you can do better.",
+    feedback_beat: "You beat {algo}!",
+    feedback_tie: "Same as {algo} — tie!",
+    feedback_lost: "{algo} did better ({n} hours).",
+    feedback_retry: "Try again",
+    feedback_challenge: "Try the algorithms to compare!",
+    disabled_backtrack: "Too many lessons: Branch & Bound would take too long (over 15).",
+
+    info: {
+      bnb: "<b>Branch &amp; Bound</b><br>Like backtracking, it tries every hour for every lesson and backtracks at dead ends — but with a twist: it keeps track of the best result found so far and <em>prunes</em> any attempt that could never beat it, without even exploring it. Guarantees the absolute minimum, but becomes impractical beyond ~15 lessons.",
+      ls: "<b>Local Search</b><br>Starts from an initial timetable and tries small random changes, accepting <em>only</em> the ones that improve (or don't worsen) things. Fast, but if every nearby change makes things worse it gets stuck in a dead end — unlike Simulated Annealing, it has no way out.",
+      sa: "<b>Simulated Annealing</b><br>Starts from an initial timetable and improves it with small random changes. Like a cooling metal: at first it accepts even worse moves (to explore, and avoid getting stuck like Local Search), then becomes increasingly selective until it converges. Handles many lessons, but doesn't guarantee the optimum."
+    }
+  }
+};
+
+/* ======= i18n engine ======= */
+const $ = (s,r=document) => r.querySelector(s);
+const $$ = (s,r=document) => [...r.querySelectorAll(s)];
+
+let gcLang = localStorage.getItem('gc_lang') ||
+  ((navigator.language||'it').toLowerCase().startsWith('en') ? 'en' : 'it');
+
+function setLang(lang) {
+  gcLang = lang;
+  const d = GC_I18N[lang];
+  $$('[data-i18n]').forEach(el => {
+    const k = el.getAttribute('data-i18n');
+    if (d[k]) el.innerHTML = d[k];
+  });
+  $$('[data-i18n-title]').forEach(el => {
+    const k = el.getAttribute('data-i18n-title');
+    if (d[k]) el.title = d[k];
+  });
+  document.title = d.page_title || document.title;
+  document.documentElement.lang = lang;
+  $('#btn-it')?.setAttribute('aria-pressed', lang === 'it');
+  $('#btn-en')?.setAttribute('aria-pressed', lang === 'en');
+  localStorage.setItem('gc_lang', lang);
+  // re-populate levels if app is loaded
+  if (typeof populateLevelSelect === 'function') populateLevelSelect();
+  // re-translate algo info if visible
+  if (typeof refreshAlgoInfo === 'function') refreshAlgoInfo();
+  // re-render the board (zone labels, subjects, teacher names all depend on language)
+  if (typeof renderBoard === 'function') renderBoard();
+}
+
+$('#btn-it')?.addEventListener('click', () => setLang('it'));
+$('#btn-en')?.addEventListener('click', () => setLang('en'));
+
+/* ======= theme toggle ======= */
+const themeBtn = $('#btn-theme');
+let currentTheme = localStorage.getItem('gc_theme') || 'dark';
+function applyTheme(t) {
+  currentTheme = t;
+  document.documentElement.setAttribute('data-theme', t === 'light' ? 'light' : '');
+  if (t === 'light') document.documentElement.setAttribute('data-theme', 'light');
+  else document.documentElement.removeAttribute('data-theme');
+  if (themeBtn) themeBtn.textContent = t === 'light' ? '☀' : '☾';
+  localStorage.setItem('gc_theme', t);
+}
+themeBtn?.addEventListener('click', () => applyTheme(currentTheme === 'light' ? 'dark' : 'light'));
+applyTheme(currentTheme);
+
+/* ======= init lang ======= */
+setLang(gcLang);
+</script>
+
+<!-- ======= GAME LOGIC ======= -->
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,880 @@
+[
+   {
+      "capacity" : 5,
+      "goal" : 35,
+      "id" : 1,
+      "items" : [
+         {
+            "id" : 2,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 22,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 11,
+            "value" : 8,
+            "weight" : 1
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 23,
+            "value" : 20,
+            "weight" : 4
+         }
+      ],
+      "timeLimitSec" : 90
+   },
+   {
+      "capacity" : 6,
+      "goal" : 115,
+      "id" : 2,
+      "items" : [
+         {
+            "id" : 2,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 12,
+            "value" : 26,
+            "weight" : 6
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         }
+      ],
+      "timeLimitSec" : 100
+   },
+   {
+      "capacity" : 8,
+      "goal" : 98,
+      "id" : 3,
+      "items" : [
+         {
+            "id" : 4,
+            "itemIdx" : 12,
+            "value" : 26,
+            "weight" : 6
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 15,
+            "value" : 10,
+            "weight" : 1
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 5,
+            "value" : 12,
+            "weight" : 2
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 8,
+            "value" : 5,
+            "weight" : 2
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         }
+      ],
+      "timeLimitSec" : 110
+   },
+   {
+      "capacity" : 13,
+      "goal" : 133,
+      "id" : 4,
+      "items" : [
+         {
+            "id" : 4,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 6,
+            "value" : 6,
+            "weight" : 2
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 11,
+            "value" : 8,
+            "weight" : 1
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 16,
+            "value" : 9,
+            "weight" : 2
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 17,
+            "value" : 7,
+            "weight" : 8
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         }
+      ],
+      "timeLimitSec" : 120
+   },
+   {
+      "capacity" : 11,
+      "goal" : 148,
+      "id" : 5,
+      "items" : [
+         {
+            "id" : 7,
+            "itemIdx" : 16,
+            "value" : 9,
+            "weight" : 2
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 24,
+            "value" : 24,
+            "weight" : 7
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 7,
+            "value" : 14,
+            "weight" : 1
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 14,
+            "value" : 4,
+            "weight" : 2
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 21,
+            "value" : 3,
+            "weight" : 1
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 0,
+            "value" : 22,
+            "weight" : 1
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         }
+      ],
+      "timeLimitSec" : 130
+   },
+   {
+      "capacity" : 10,
+      "goal" : 161,
+      "id" : 6,
+      "items" : [
+         {
+            "id" : 1,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 13,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 7,
+            "value" : 14,
+            "weight" : 1
+         },
+         {
+            "id" : 12,
+            "itemIdx" : 8,
+            "value" : 5,
+            "weight" : 2
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 9,
+            "value" : 15,
+            "weight" : 3
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 17,
+            "value" : 7,
+            "weight" : 8
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 21,
+            "value" : 3,
+            "weight" : 1
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 22,
+            "value" : 2,
+            "weight" : 1
+         }
+      ],
+      "timeLimitSec" : 140
+   },
+   {
+      "capacity" : 12,
+      "goal" : 197,
+      "id" : 7,
+      "items" : [
+         {
+            "id" : 13,
+            "itemIdx" : 9,
+            "value" : 15,
+            "weight" : 3
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 15,
+            "value" : 10,
+            "weight" : 1
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 24,
+            "value" : 24,
+            "weight" : 7
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 0,
+            "value" : 22,
+            "weight" : 1
+         },
+         {
+            "id" : 12,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 14,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 15,
+            "itemIdx" : 7,
+            "value" : 14,
+            "weight" : 1
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 8,
+            "value" : 5,
+            "weight" : 2
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 5,
+            "value" : 12,
+            "weight" : 2
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 6,
+            "value" : 6,
+            "weight" : 2
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 11,
+            "value" : 8,
+            "weight" : 1
+         }
+      ],
+      "timeLimitSec" : 150
+   },
+   {
+      "capacity" : 20,
+      "goal" : 218,
+      "id" : 8,
+      "items" : [
+         {
+            "id" : 12,
+            "itemIdx" : 16,
+            "value" : 9,
+            "weight" : 2
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 24,
+            "value" : 24,
+            "weight" : 7
+         },
+         {
+            "id" : 13,
+            "itemIdx" : 17,
+            "value" : 7,
+            "weight" : 8
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 15,
+            "value" : 10,
+            "weight" : 1
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 21,
+            "value" : 3,
+            "weight" : 1
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 12,
+            "value" : 26,
+            "weight" : 6
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 17,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 5,
+            "value" : 12,
+            "weight" : 2
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 9,
+            "value" : 15,
+            "weight" : 3
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 0,
+            "value" : 22,
+            "weight" : 1
+         },
+         {
+            "id" : 16,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         },
+         {
+            "id" : 15,
+            "itemIdx" : 22,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 14,
+            "itemIdx" : 14,
+            "value" : 4,
+            "weight" : 2
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         }
+      ],
+      "timeLimitSec" : 160
+   },
+   {
+      "capacity" : 24,
+      "goal" : 242,
+      "id" : 9,
+      "items" : [
+         {
+            "id" : 0,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 17,
+            "itemIdx" : 5,
+            "value" : 12,
+            "weight" : 2
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 24,
+            "value" : 24,
+            "weight" : 7
+         },
+         {
+            "id" : 13,
+            "itemIdx" : 7,
+            "value" : 14,
+            "weight" : 1
+         },
+         {
+            "id" : 18,
+            "itemIdx" : 23,
+            "value" : 20,
+            "weight" : 4
+         },
+         {
+            "id" : 12,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 17,
+            "value" : 7,
+            "weight" : 8
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 9,
+            "value" : 15,
+            "weight" : 3
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         },
+         {
+            "id" : 19,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 8,
+            "value" : 5,
+            "weight" : 2
+         },
+         {
+            "id" : 16,
+            "itemIdx" : 16,
+            "value" : 9,
+            "weight" : 2
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 12,
+            "value" : 26,
+            "weight" : 6
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 21,
+            "value" : 3,
+            "weight" : 1
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 0,
+            "value" : 22,
+            "weight" : 1
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 22,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 15,
+            "itemIdx" : 14,
+            "value" : 4,
+            "weight" : 2
+         },
+         {
+            "id" : 14,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         }
+      ],
+      "timeLimitSec" : 180
+   },
+   {
+      "capacity" : 18,
+      "goal" : 242,
+      "id" : 10,
+      "items" : [
+         {
+            "id" : 14,
+            "itemIdx" : 14,
+            "value" : 4,
+            "weight" : 2
+         },
+         {
+            "id" : 13,
+            "itemIdx" : 21,
+            "value" : 3,
+            "weight" : 1
+         },
+         {
+            "id" : 0,
+            "itemIdx" : 15,
+            "value" : 10,
+            "weight" : 1
+         },
+         {
+            "id" : 16,
+            "itemIdx" : 22,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 18,
+            "itemIdx" : 7,
+            "value" : 14,
+            "weight" : 1
+         },
+         {
+            "id" : 23,
+            "itemIdx" : 20,
+            "value" : 16,
+            "weight" : 5
+         },
+         {
+            "id" : 15,
+            "itemIdx" : 1,
+            "value" : 40,
+            "weight" : 3
+         },
+         {
+            "id" : 5,
+            "itemIdx" : 6,
+            "value" : 6,
+            "weight" : 2
+         },
+         {
+            "id" : 19,
+            "itemIdx" : 18,
+            "value" : 3,
+            "weight" : 2
+         },
+         {
+            "id" : 4,
+            "itemIdx" : 17,
+            "value" : 7,
+            "weight" : 8
+         },
+         {
+            "id" : 20,
+            "itemIdx" : 16,
+            "value" : 9,
+            "weight" : 2
+         },
+         {
+            "id" : 22,
+            "itemIdx" : 9,
+            "value" : 15,
+            "weight" : 3
+         },
+         {
+            "id" : 11,
+            "itemIdx" : 4,
+            "value" : 18,
+            "weight" : 1
+         },
+         {
+            "id" : 1,
+            "itemIdx" : 12,
+            "value" : 26,
+            "weight" : 6
+         },
+         {
+            "id" : 6,
+            "itemIdx" : 3,
+            "value" : 28,
+            "weight" : 3
+         },
+         {
+            "id" : 8,
+            "itemIdx" : 0,
+            "value" : 22,
+            "weight" : 1
+         },
+         {
+            "id" : 9,
+            "itemIdx" : 13,
+            "value" : 35,
+            "weight" : 5
+         },
+         {
+            "id" : 24,
+            "itemIdx" : 24,
+            "value" : 24,
+            "weight" : 7
+         },
+         {
+            "id" : 21,
+            "itemIdx" : 10,
+            "value" : 45,
+            "weight" : 1
+         },
+         {
+            "id" : 17,
+            "itemIdx" : 8,
+            "value" : 5,
+            "weight" : 2
+         },
+         {
+            "id" : 7,
+            "itemIdx" : 2,
+            "value" : 30,
+            "weight" : 2
+         },
+         {
+            "id" : 10,
+            "itemIdx" : 23,
+            "value" : 20,
+            "weight" : 4
+         },
+         {
+            "id" : 2,
+            "itemIdx" : 5,
+            "value" : 12,
+            "weight" : 2
+         },
+         {
+            "id" : 12,
+            "itemIdx" : 19,
+            "value" : 2,
+            "weight" : 1
+         },
+         {
+            "id" : 3,
+            "itemIdx" : 11,
+            "value" : 8,
+            "weight" : 1
+         }
+      ],
+      "timeLimitSec" : 220
+   }
+]

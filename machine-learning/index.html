@@ -1,130 +1,148 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Predittore Prezzo Case — Regressione Lineare</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Come Impara una Macchina</title>
+  <link rel="stylesheet" href="style.css"/>
 </head>
 <body>
-  <header class="app-header centered">
-    <button id="btnLang" class="lang-switch">EN</button>
-    <h1 id="t_title">La matematica delle case</h1>
-  </header>
 
-  <!-- Spiegazione + formula collassabile (si può rimuovere, vedi note) -->
-  <section class="top-explain panel">
-    <p id="t_explain_text"></p>
-    <details class="formula-details">
-      <summary id="t_formula_toggle">Formula (apri/chiudi)</summary>
-      <div class="formula pretty-math">
-        <math display="block">
-          <mrow>
-            <mi>ŷ</mi><mo>=</mo>
-            <msub><mi>w</mi><mn>0</mn></msub>
-            <mo>+</mo><msub><mi>w</mi><mi>mq</mi></msub><mo>·</mo><mi>mq</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>cam</mi></msub><mo>·</mo><mi>camere</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>bag</mi></msub><mo>·</mo><mi>bagni</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>piano</mi></msub><mo>·</mo><mi>piano</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>prox</mi></msub><mo>·</mo><mi>vicinanza\;metro</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>balc</mi></msub><mo>·</mo><mi>[balcone]</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>elev</mi></msub><mo>·</mo><mi>[ascensore]</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>B</mi></msub><mo>·</mo><mi>[quart=Buono]</mi>
-            <mo>+</mo><msub><mi>w</mi><mi>C</mi></msub><mo>·</mo><mi>[quart=Ottimo]</mi>
-          </mrow>
-        </math>
-      </div>
+<!-- ======= HEADER ======= -->
+<header>
+  <div class="header-emoji" aria-hidden="true"><span>🤖</span><span>🧠</span><span>🎓</span></div>
+  <h1 data-i18n="title">Come Impara una Macchina</h1>
+  <div class="header-right">
+    <a class="home-link" href="../index.html" title="La Sala Giochi dell'IA" aria-label="Home: La Sala Giochi dell'IA">🏠 <span>Home</span></a>
+    <button id="btn-it" type="button" aria-pressed="true">IT</button>
+    <button id="btn-en" type="button" aria-pressed="false">EN</button>
+    <button id="btn-theme" type="button" aria-label="Toggle theme">☾</button>
+  </div>
+</header>
+
+<!-- ======= 3-COLUMN LAYOUT ======= -->
+<main class="layout-3col">
+
+  <!-- ======= LEFT PANE: instructions ======= -->
+  <aside class="left-pane">
+    <div class="tagline" data-i18n="tagline">Tre modi di imparare: con un maestro, da sola, a suon di premi.</div>
+
+    <div class="howto-arcade">
+      <div class="howto-step"><span class="howto-icon">🧑‍🏫</span><span data-i18n="howto_sup"><b>Supervisionato</b>: impara da esempi con la risposta giusta</span></div>
+      <div class="howto-step"><span class="howto-icon">🔍</span><span data-i18n="howto_unsup"><b>Non supervisionato</b>: nessuna risposta, trova da sola i gruppi</span></div>
+      <div class="howto-step"><span class="howto-icon">🏆</span><span data-i18n="howto_rl"><b>Rinforzo</b>: prova, sbaglia, riceve premi e punizioni</span></div>
+    </div>
+
+    <!-- how to play the current mode (filled by JS) -->
+    <div id="modeHelp" class="mode-help"></div>
+
+    <details class="theory-details">
+      <summary data-i18n="theory_summary">ℹ️ Qual è la differenza, in pratica?</summary>
+      <p data-i18n="intro_p1">Nel <b>supervisionato</b> diamo alla macchina tanti esempi <em>già etichettati</em> ("questa è una mela", "questo è un limone"): impara la regola e poi la usa su casi nuovi. Così funzionano i filtri anti-spam o il riconoscimento delle foto.</p>
+      <p data-i18n="intro_p2">Nel <b>non supervisionato</b> le etichette non ci sono: la macchina cerca da sola <em>somiglianze</em> e raggruppa i dati. Scopre i gruppi, ma non sa come si chiamano. Così si trovano i profili dei clienti di un negozio.</p>
+      <p data-i18n="intro_p3">Nel <b>rinforzo</b> non ci sono dati da cui partire: un agente <em>agisce</em> in un ambiente e riceve premi o punizioni. Provando e riprovando impara la strategia migliore. Così i robot imparano a camminare e i computer a giocare a scacchi.</p>
     </details>
+
+  </aside>
+
+  <!-- ======= CENTER PANE ======= -->
+  <section class="center-pane">
+    <div class="stage">
+
+      <div class="controls-bar">
+        <!-- SUPERVISED -->
+        <div class="mode-group" data-group="sup">
+          <!-- fruit palette: the name shows only on the selected fruit -->
+          <div class="fruit-palette">
+            <button class="tool-btn fruit" type="button" data-tool="0" aria-pressed="true">🍎 <span class="tool-name" data-i18n="c0">Mela</span></button>
+            <button class="tool-btn fruit" type="button" data-tool="1" aria-pressed="false">🍋 <span class="tool-name" data-i18n="c1">Limone</span></button>
+            <button class="tool-btn fruit" type="button" data-tool="2" aria-pressed="false">🍉 <span class="tool-name" data-i18n="c2">Anguria</span></button>
+            <button class="tool-btn fruit" type="button" data-tool="3" aria-pressed="false">🍓 <span class="tool-name" data-i18n="c3">Fragola</span></button>
+            <button class="tool-btn fruit" type="button" data-tool="4" aria-pressed="false">🍌 <span class="tool-name" data-i18n="c4">Banana</span></button>
+            <button class="tool-btn fruit" type="button" data-tool="5" aria-pressed="false">🍍 <span class="tool-name" data-i18n="c5">Ananas</span></button>
+          </div>
+          <button class="tool-btn" type="button" data-tool="test" aria-pressed="false">❓ <span data-i18n="tool_test">Prova</span></button>
+          <button id="supQuiz" type="button" class="primary" data-i18n="btn_quiz">🎲 Frutto misterioso</button>
+          <label class="range"><span>k</span><input id="supK" type="range" min="1" max="9" step="2" value="3"/><b id="supKVal">3</b></label>
+          <label class="chk"><input id="supZones" type="checkbox"/> <span data-i18n="chk_zones">Zone</span></label>
+          <button id="supReset" type="button" data-i18n="btn_reset">Reset</button>
+        </div>
+
+        <!-- UNSUPERVISED -->
+        <div class="mode-group" data-group="unsup" hidden>
+          <label class="range"><span>K</span><input id="unK" type="range" min="2" max="5" step="1" value="3"/><b id="unKVal">3</b></label>
+          <button id="unStep" type="button" class="primary" data-i18n="btn_step">Passo</button>
+          <button id="unRun" type="button" data-i18n="btn_run">▶ Avvia</button>
+          <label class="chk"><input id="unTruth" type="checkbox"/> <span data-i18n="chk_truth">Mostra etichette vere</span></label>
+          <button id="unReset" type="button" data-i18n="btn_reset">Reset</button>
+        </div>
+
+        <!-- REINFORCEMENT -->
+        <div class="mode-group" data-group="rl" hidden>
+          <button id="rlOne" type="button" data-i18n="btn_episode">▶ 1 tentativo</button>
+          <button id="rlMany" type="button" data-i18n="btn_train">⏩ Allena ×10</button>
+          <button id="rlExam" type="button" class="primary" data-i18n="btn_exam">🎓 Esame</button>
+          <label class="range"><span data-i18n="lbl_eps">Curiosità</span><input id="rlEps" type="range" min="0" max="0.5" step="0.05" value="0.2"/><b id="rlEpsVal">0.20</b></label>
+          <label class="chk"><input id="rlArrows" type="checkbox" checked/> <span data-i18n="chk_arrows">Frecce</span></label>
+          <button id="rlReset" type="button" data-i18n="btn_reset_brain">🔄 Nuova partita</button>
+        </div>
+
+        <div id="hud"></div>
+      </div>
+
+      <div class="board-wrap" aria-label="Area di gioco">
+        <canvas id="canvas"></canvas>
+        <div id="feedback" class="feedback-toast"></div>
+      </div>
+
+      <div id="caption" class="caption"></div>
+
+    </div>
   </section>
 
-  <main class="app-grid">
-    <!-- Controlli -->
-    <section class="panel controls">
-      <h2 id="t_controls">Controlli</h2>
+  <!-- ======= RIGHT PANE: modes ======= -->
+  <aside class="right-pane sidebar">
+    <h3 data-i18n="side_title">Modalità</h3>
 
-      <div class="control">
-        <label for="mq"><span id="t_mq">Metri quadri</span>: <span id="mqVal">70</span> m²</label>
-        <input id="mq" type="range" min="30" max="150" value="70" step="1">
+    <button class="algo-btn" data-mode="sup">
+      <span class="emoji">🧑‍🏫</span>
+      <span class="algo-label"><span data-i18n="m_sup">Supervisionato</span><small data-i18n="m_sup_sub">k-Nearest Neighbors</small></span>
+    </button>
+    <button class="algo-btn" data-mode="unsup">
+      <span class="emoji">🔍</span>
+      <span class="algo-label"><span data-i18n="m_unsup">Non supervisionato</span><small data-i18n="m_unsup_sub">K-Means</small></span>
+    </button>
+    <button class="algo-btn" data-mode="rl">
+      <span class="emoji">🏆</span>
+      <span class="algo-label"><span data-i18n="m_rl">Con rinforzo</span><small data-i18n="m_rl_sub">Q-Learning</small></span>
+    </button>
+
+    <div id="algoInfo" class="algo-info show"></div>
+
+    <details class="theory-details" open>
+      <summary data-i18n="cmp_title">Tre modi a confronto</summary>
+      <div class="table-scroll">
+        <table class="cmp-table">
+          <thead><tr><th></th><th data-i18n="cmp_h_in">Cosa riceve</th><th data-i18n="cmp_h_out">Cosa impara</th></tr></thead>
+          <tbody>
+            <tr><td>🧑‍🏫</td><td data-i18n="cmp_sup_in">Dati + risposte giuste</td><td data-i18n="cmp_sup_out">Una regola per etichettare casi nuovi</td></tr>
+            <tr><td>🔍</td><td data-i18n="cmp_unsup_in">Solo dati</td><td data-i18n="cmp_unsup_out">Gruppi di dati simili</td></tr>
+            <tr><td>🏆</td><td data-i18n="cmp_rl_in">Premi e punizioni</td><td data-i18n="cmp_rl_out">Quale azione fare in ogni situazione</td></tr>
+          </tbody>
+        </table>
       </div>
+    </details>
+  </aside>
 
-      <div class="control">
-        <label for="camere"><span id="t_camere">Camere</span>: <span id="camereVal">3</span></label>
-        <input id="camere" type="range" min="1" max="6" value="3" step="1">
-      </div>
+</main>
 
-      <div class="control">
-        <label for="bagni"><span id="t_bagni">Bagni</span>: <span id="bagniVal">2</span></label>
-        <input id="bagni" type="range" min="1" max="3" value="2" step="1">
-      </div>
+<!-- ======= FOOTER ======= -->
+<footer class="site-footer">© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></footer>
 
-      <div class="control">
-        <label for="piano"><span id="t_piano">Piano</span>: <span id="pianoVal">2</span></label>
-        <input id="piano" type="range" min="0" max="10" value="2" step="1">
-      </div>
-
-      <div class="control">
-        <label for="dist"><span id="t_dist">Vicinanza alla metro</span>: <span id="distVal">600</span> m</label>
-        <input id="dist" type="range" min="0" max="2000" value="600" step="25">
-      </div>
-
-      <div class="control row">
-        <label for="balcone" id="t_balcone">Balcone</label>
-        <input id="balcone" type="checkbox" checked>
-      </div>
-
-      <div class="control row">
-        <label for="ascensore" id="t_ascensore">Ascensore</label>
-        <input id="ascensore" type="checkbox">
-      </div>
-
-      <div class="control row">
-        <label for="quartiere" id="t_quartiere">Quartiere</label>
-        <select id="quartiere">
-          <option value="A">A — Base</option>
-          <option value="B" selected>B — Buono</option>
-          <option value="C">C — Ottimo</option>
-        </select>
-      </div>
-
-      <p class="hint" id="t_quart_explain">
-        * A=Base (servizi essenziali), B=Buono (servizi e collegamenti migliori), C=Ottimo (molto richiesto).
-      </p>
-
-      <div class="buttons">
-        <button id="btnReset">Reset</button>
-        <button id="btnRandom">Random</button>
-        <button id="btnAddPoint">Aggiungi al grafico</button>
-        <button id="btnClearPoints">Pulisci punti</button>
-      </div>
-    </section>
-
-    <!-- Scatter + tooltip -->
-    <section class="panel viz">
-      <h2 id="t_scatterTitle">m² vs Prezzo previsto</h2>
-      <div class="canvas-wrap" style="position:relative">
-        <canvas id="scatter"></canvas>
-        <div id="tooltip" class="tooltip hidden"></div>
-      </div>
-      <div class="legend">
-        <span class="dot you"></span> <span id="t_legend_you">tua casa</span>
-        <span class="dot saved"></span> <span id="t_legend_saved">case aggiunte</span>
-        <span class="line"></span> <span id="t_legend_line">relazione m² → prezzo (altre feature fissate)</span>
-      </div>
-    </section>
-
-    <!-- Prezzo + barre -->
-    <section class="panel metrics">
-      <h2 id="t_priceTitle">Prezzo previsto</h2>
-      <div id="price" class="price">€ 0</div>
-      <h3 id="t_contribTitle">Contribuzioni delle feature</h3>
-      <div class="canvas-wrap"><canvas id="bars"></canvas></div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <small>© Carolina Crespi</small>
-  </footer>
-
-  <script src="app.js"></script>
+<script src="i18n.js"></script>
+<script src="core.js"></script>
+<script src="sup.js"></script>
+<script src="unsup.js"></script>
+<script src="rl.js"></script>
 </body>
 </html>
