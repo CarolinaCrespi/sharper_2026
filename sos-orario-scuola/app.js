@@ -135,9 +135,9 @@ function populateLevelSelect() {
   LEVELS.forEach(l => {
     const opt = document.createElement('option');
     opt.value = l.id;
-    const name = typeof l.name === 'object' ? (l.name[lang()] || l.name.it) : l.name;
-    const n = l.nodes.length;
-    opt.textContent = `${name} (${n} lezioni, ≤${l.goal})`;
+    opt.textContent = tr('level_opt_tpl')
+      .replace('{n}', l.nodes.length)
+      .replace('{goal}', l.goal);
     elLevel.appendChild(opt);
   });
   if (prev) elLevel.value = prev;
