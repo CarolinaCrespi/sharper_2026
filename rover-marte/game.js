@@ -276,18 +276,18 @@ function setupLevel() {
   // reference for your stars: what a rover without the map manages here
   const ref = runReplan();
   G.ref = ref.status === 'arrived' ? energyOf(ref) : Math.ceil(G.best.cost * 1.5);
-  G.results = {};
-  G.agents = {};
-  $$('.algo-btn').forEach(b => b.classList.remove('active'));
-  $('#algoInfo').classList.remove('show');
   newPlayer();
 }
 
+// a fresh start on the same map: the algorithms' trails and results go too
 function newPlayer() {
   stopReplay();
-  G.agents.you = newAgent('you');
+  G.agents = { you: newAgent('you') };
+  G.results = {};
   G.active = 'you';
-  delete G.results.you;
+  G.frame = 0;
+  $$('.algo-btn').forEach(b => b.classList.remove('active'));
+  $('#algoInfo').classList.remove('show');
   hideToast();
   caption('cap_you_start', { bat: G.battery });
   renderBoard(); renderHUD(); requestDraw();
