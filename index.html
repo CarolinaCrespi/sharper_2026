@@ -20,6 +20,10 @@
   <meta name="twitter:image" content="https://carolinacrespi.github.io/sharper_2026/assets/banner.jpg" />
 
   <link rel="stylesheet" href="style.css" />
+
+  <!-- Contatore visite (GoatCounter: senza cookie) -->
+  <script data-goatcounter="https://sharpercounter.goatcounter.com/count"
+          async src="//gc.zgo.at/count.js"></script>
 </head>
 <body>
 
@@ -144,6 +148,8 @@
     <span>© 2026 <a href="https://www.dmi.unict.it/ccrespi/" target="_blank" rel="noopener">Carolina Crespi</a></span>
     <span class="sep">·</span>
     <span>CIS Lab · DMI – Università di Catania</span>
+    <span class="sep visits" hidden>·</span>
+    <span class="visits" hidden>👁 <span id="visit-count"></span> <span data-i18n="visits">visite</span></span>
   </footer>
 
   <!-- ======= I18N + THEME ======= -->
@@ -183,7 +189,8 @@
         lead_label: "Responsabile",
         affil: "Dipartimento di Matematica e Informatica · Università di Catania",
         mail_label: "📬 Info, curiosità o un bug da segnalare? Scrivimi:",
-        group_site: "Visita il sito del gruppo ↗"
+        group_site: "Visita il sito del gruppo ↗",
+        visits: "visite"
       },
       en: {
         page_title: "The AI Arcade",
@@ -219,7 +226,8 @@
         lead_label: "Head of the lab",
         affil: "Department of Mathematics and Computer Science · University of Catania",
         mail_label: "📬 Questions, curiosity or a bug to report? Write to me:",
-        group_site: "Visit the group website ↗"
+        group_site: "Visit the group website ↗",
+        visits: "visits"
       }
     };
 
@@ -253,6 +261,15 @@
     themeBtn.addEventListener('click', () =>
       applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
     applyTheme(localStorage.getItem('nr_theme') || 'dark');
+
+    // total visits from GoatCounter; stays hidden if the counter isn't reachable
+    fetch('https://sharpercounter.goatcounter.com/counter/TOTAL.json')
+      .then(r => r.ok ? r.json() : Promise.reject())
+      .then(data => {
+        $('#visit-count').textContent = data.count;
+        $$('.visits').forEach(el => el.hidden = false);
+      })
+      .catch(() => {});
   </script>
 </body>
 </html>
