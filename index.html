@@ -262,8 +262,8 @@
       applyTheme(document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'));
     applyTheme(localStorage.getItem('nr_theme') || 'dark');
 
-    // total visits from GoatCounter; stays hidden if the counter isn't reachable
-    fetch('https://sharpercounter.goatcounter.com/counter/TOTAL.json')
+    // home page visits from GoatCounter (TOTAL lags by hours); stays hidden if the counter isn't reachable
+    fetch('https://sharpercounter.goatcounter.com/counter/' + encodeURIComponent('/sharper_2026/') + '.json')
       .then(r => r.ok ? r.json() : Promise.reject())
       .then(data => {
         $('#visit-count').textContent = data.count;
